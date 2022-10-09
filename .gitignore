@@ -9,9 +9,6 @@
 *.sln
 .idea/*
 software/.vs/*
-workspace_dev/*
-workspace/*
-!workspace/.gitkeep
 software/models_interface/output_sounds/*.wav
 software/transformations_interface/output_sounds/*.wav
 .ipynb_checkpoints/
