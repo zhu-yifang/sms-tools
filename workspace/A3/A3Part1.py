@@ -50,7 +50,7 @@ signal x by generating and adding two sinusoids of the given frequencies.
 """
 
 
-def minimizeEnergySpreadDFT(x, fs, f1, f2):
+def minimizeEnergySpreadDFT(x: np.array, fs: float, f1: float, f2: float):
     """
     Inputs:
         x (numpy array) = input signal 
@@ -63,7 +63,10 @@ def minimizeEnergySpreadDFT(x, fs, f1, f2):
                            mX is (M/2)+1 samples long (M is to be computed)
     """
     ## Your code here
+    sample_size = x.size
+    # get the fftbuffer size
+    
 
 if __name__ == "__main__":
-    
+
     
