@@ -1,8 +1,7 @@
 ﻿from scipy.fftpack import fft
-from scipy.io.wavfile import read # read .wav file
 import numpy as np
-from math import gcd
-
+import math
+import matplotlib.pyplot as plt
 """
 A3-Part-1: Minimize energy spread in DFT of sinusoids
 Given a signal consisting of two sinusoids, write a function that selects the first M samples from 
@@ -63,10 +62,36 @@ def minimizeEnergySpreadDFT(x: np.array, fs: float, f1: float, f2: float):
                            mX is (M/2)+1 samples long (M is to be computed)
     """
     ## Your code here
-    sample_size = x.size
+    time: float = x.size / fs
+    period1: float = 1 / f1
+    period2: float = 1 / f2
+    period_num1 = int(time / period1)
+    period_num2 = int(time / period2)
+    # M is the window size
+    M: int = get_lcm(period_num1, period_num2)
+    hM1: int = int(math.floor(M + 1) / 2)
+    hM2: int = int(math.floor(M / 2))
+    # slice the signal
+    x1 = x[:M]
     # get the fftbuffer size
-    
+    N: int = 2**math.ceil(math.log2(M))
+    fftbuffer = np.zeros(N)
+    fftbuffer[:hM1] = x1[hM2:]
+    fftbuffer[-hM2:] = x1[:hM2]
+    X = fft(fftbuffer)
+    mX = 20 * np.log10(abs(X))
+    return mX
+
+
+def get_lcm(x: int, y: int):
+    return (x * y) // math.gcd(x, y)
+
 
 if __name__ == "__main__":
-
-    
+    f1 = 80
+    f2 = 200
+    fs = 10000
+    x = np.sin(2 * np.pi * f1 * np.arange(0, 1, 1 / fs)) + np.sin(
+        2 * np.pi * f2 * np.arange(0, 1, 1 / fs))
+    mX = minimizeEnergySpreadDFT(x, fs, f1, f2)
+    print(mX)
