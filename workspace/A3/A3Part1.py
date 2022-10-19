@@ -61,30 +61,16 @@ def minimizeEnergySpreadDFT(x: np.array, fs: float, f1: float, f2: float):
         mX (numpy array) = The positive half of the DFT spectrum (in dB) of the M sample segment of x. 
                            mX is (M/2)+1 samples long (M is to be computed)
     """
-    ## Your code here
-    time: float = x.size / fs
-    period1: float = 1 / f1
-    period2: float = 1 / f2
-    period_num1 = int(time / period1)
-    period_num2 = int(time / period2)
-    # M is the window size
-    M: int = get_lcm(period_num1, period_num2)
-    hM1: int = int(math.floor(M + 1) / 2)
-    hM2: int = int(math.floor(M / 2))
-    # slice the signal
-    x1 = x[:M]
-    # get the fftbuffer size
-    N: int = 2**math.ceil(math.log2(M))
-    fftbuffer = np.zeros(N)
-    fftbuffer[:hM1] = x1[hM2:]
-    fftbuffer[-hM2:] = x1[:hM2]
-    X = fft(fftbuffer)
-    mX = 20 * np.log10(abs(X))
-    return mX
-
-
-def get_lcm(x: int, y: int):
-    return (x * y) // math.gcd(x, y)
+    # number of samples in 1 period of f1
+    T1 = fs // f1
+    # number of samples in 1 period of f2
+    T2 = fs // f2
+    # LCM of T1 and T2, M is the size of the sample window
+    M = math.lcm(int(T1), int(T2))
+    # get the DFT of the first M samples of x
+    x = x[:M]
+    X = abs(fft(x))
+    return 20 * np.log10(X[:M // 2 + 1])
 
 
 if __name__ == "__main__":

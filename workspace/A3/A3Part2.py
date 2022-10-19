@@ -1,6 +1,6 @@
 ﻿from scipy.fftpack import fft
 import numpy as np
-
+import matplotlib.pyplot as plt
 """
 A3-Part-2: Optimal zero-padding
 
@@ -44,6 +44,8 @@ maximum value at bin index 6 corresponding to the frequency of 250 Hz. The outpu
 121 samples in length. 
 
 """
+
+
 def optimalZeropad(x, fs, f):
     """
     Inputs:
@@ -55,4 +57,29 @@ def optimalZeropad(x, fs, f):
         mX (numpy array) = The positive half of the DFT spectrum of the N point DFT after zero-padding 
                         x appropriately (zero-padding length to be computed). mX is (N/2)+1 samples long
     """
-    ## Your code here
+    period_len = fs / f  # number of samples in one period
+    M = len(x)
+    N = int(np.ceil(M / period_len) * period_len)
+    X = fft(x, N)
+    # get the db magnitude spectrum
+    mX = 20 * np.log10(np.abs(X[:(N // 2) + 1]))
+    return mX
+
+
+if __name__ == '__main__':
+    # Test case 1:
+    fs = 1000.0
+    f = 100.0
+    M = 25
+    N = 30
+    x = np.cos(2 * np.pi * f * np.arange(M) / fs)
+    mX = optimalZeropad(x, fs, f)
+
+    # Test case 2:
+    fs = 10000.0
+    f = 250.0
+    M = 210
+    N = 240
+    x = np.cos(2 * np.pi * f * np.arange(M) / fs)
+    mX = optimalZeropad(x, fs, f)
+    print(mX)

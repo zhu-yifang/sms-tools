@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append('../../software/models/')
 from dftModel import dftAnal, dftSynth
 from scipy.signal import get_window
@@ -46,6 +47,8 @@ Test case 1: For an input signal with 40 Hz, 100 Hz, 200 Hz, 1000 Hz components,
 Test case 2: For an input signal with 23 Hz, 36 Hz, 230 Hz, 900 Hz, 2300 Hz components, yfilt will only contain
 230 Hz, 900 Hz and 2300 Hz components. 
 """
+
+
 def suppressFreqDFTmodel(x, fs, N):
     """
     Inputs:
@@ -61,5 +64,28 @@ def suppressFreqDFTmodel(x, fs, N):
     M = len(x)
     w = get_window('hamming', M)
     outputScaleFactor = sum(w)
-    
-    ## Your code here
+    ### Your code here
+    mX, pX = dftAnal(x, w, N)
+    y = dftSynth(mX, pX, N)
+    unit_f = fs / N  # unit frequency
+    idx = int(np.ceil(70 / unit_f))
+    mX[:idx + 1] = -120
+    yfilt = dftSynth(mX, pX, N)
+    # plot y and yfilt
+    plt.figure(1, figsize=(9.5, 6))
+    plt.subplot(2, 1, 1)
+    plt.plot(np.arange(M) / float(fs), y)
+    plt.axis([0, M / float(fs), min(y), max(y)])
+    plt.title('y: Output of dftSynth() without filtering')
+    plt.subplot(2, 1, 2)
+    plt.plot(np.arange(M) / float(fs), yfilt)
+    plt.axis([0, M / float(fs), min(yfilt), max(yfilt)])
+    plt.title('yfilt: Output of dftSynth() with filtering')
+    plt.tight_layout()
+    plt.show()
+    return y, yfilt
+
+
+if __name__ == '__main__':
+    # Test case 1:
+    pass

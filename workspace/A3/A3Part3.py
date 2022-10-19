@@ -1,7 +1,6 @@
 import numpy as np
 from scipy.fftpack import fft, fftshift
 import math
-
 """
 A3-Part-3: Symmetry properties of the DFT
 
@@ -38,6 +37,7 @@ windowing), the function returns (False,  array([ 4.,  1.,  2.,  3.,  1.,  2.,  
 2.+0.69j, 2.+3.51j, 2.-1.08j, 2.+1.08j, 2.-3.51j, 2.-0.69j])) (values are approximate)
 """
 
+
 def testRealEven(x):
     """
     Inputs:
@@ -49,3 +49,22 @@ def testRealEven(x):
         X (numpy array, possibly complex) = The M point DFT of dftbuffer 
     """
     ## Your code here
+    M = len(x)
+    dftbuffer = np.zeros(M)
+    dftbuffer[:M // 2 + 1] = x[M // 2:]
+    dftbuffer[M // 2 + 1:] = x[:M // 2]
+    X = fft(dftbuffer)
+    is_real_even = all(X.imag < 1e-6)
+    return is_real_even, dftbuffer, X
+
+
+if __name__ == '__main__':
+    # Test case 1
+    x = np.array([2, 3, 4, 3, 2])
+    (isRealEven, dftbuffer, X) = testRealEven(x)
+    print("Test case 1: ", isRealEven, dftbuffer, X)
+
+    # Test case 2
+    x = np.array([1, 2, 3, 4, 1, 2, 3])
+    (isRealEven, dftbuffer, X) = testRealEven(x)
+    print("Test case 2: ", isRealEven, dftbuffer, X)
