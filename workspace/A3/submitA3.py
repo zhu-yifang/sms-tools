@@ -5,13 +5,14 @@ import email
 import email.message
 import email.encoders
 import sys
-import pickle
 import json
 import base64
 import numpy as np
 import subprocess
 import os
 import warnings
+import fickling
+
 warnings.filterwarnings("ignore")
 import matplotlib.pyplot as plt
 # Python 2 and 3 compatibility:
@@ -245,9 +246,9 @@ def output(partIdx):
     outputString = ''
     filename = open('testInputA3.pkl','rb')
     try: ## load the dict containing output types and test cases
-        dictInput = pickle.load(filename,encoding='latin1')  ## python3
+        dictInput = fickling.load(filename,encoding='latin1')  ## python3
     except TypeError:
-        dictInput = pickle.load(filename)  ## python2 
+        dictInput = fickling.load(filename)  ## python2 
         
     testCases = dictInput['testCases']
     outputType = dictInput['outputType']
