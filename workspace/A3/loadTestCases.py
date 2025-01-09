@@ -1,4 +1,4 @@
-import pickle
+import fickling
 
 PA = 'A3'
 
@@ -12,9 +12,9 @@ def load(partId, caseId=1):
 		testcase (dict) = {'input': <input test case>, 'output': <expected output for the input test case>}
 	"""
 	try:
-		data = pickle.load(open('testInput%s.pkl'%PA,'rb'), encoding='latin1')  ## python3
+		data = fickling.load(open('testInput%s.pkl'%PA,'rb'), encoding='latin1')  ## python3
 	except TypeError:
-		data = pickle.load(open('testInput%s.pkl'%PA,'rb'))  ## python2
+		data = fickling.load(open('testInput%s.pkl'%PA,'rb'))  ## python2
 		
 	part = u'%s-part-%d'%(PA, partId)
 	if part not in data['exampleInputs']:
