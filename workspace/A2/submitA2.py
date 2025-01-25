@@ -160,7 +160,7 @@ def send_request(values):
     "'" + str(json.dumps(values)) + "' " + \
     "'https://www.coursera.org/api/onDemandProgrammingScriptSubmissions.v1'"
     print ('\n== The request sent to Coursera: \n' + req)
-    output = subprocess.check_output(req, shell=True)
+    output = subprocess.check_output(req, shell=False)
     return output
 
 def send_request_new(values):
